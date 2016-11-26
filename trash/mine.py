@@ -10,6 +10,7 @@ import numpy.polynomial.legendre as legndr
 matplotlib.use('QT5Agg')
 import matplotlib.pyplot as plt
 
+# legndr.leggauss()
 
 def get_polynoms(deg):
     """ Returns the list contains all legendre polynomials which degree less then deg"""
@@ -38,27 +39,29 @@ def calculate_A(x_coords, pols):
 def solve_task(x_coords, y_coords, pols):
     # x_coords = range(20)
     # y_coords = np.random.normal(10, 3, 20)
-    deg = len(x_coords)
+    deg = len(x_coords) -1
 
-    pols = pols[:deg]
+    # pols = pols[:deg]
     # pols = get_polynoms(deg)
 
 
-    A = calculate_A(x_coords, pols)
-    B = y_coords
-
-    coefs = np.linalg.solve(A, B)
+    # A = calculate_A(x_coords, pols)
+    # B = y_coords
+    #
+    # coefs = np.linalg.solve(A, B)
     # coefs, info = la.cgs(A, B, tol=1e-10)
     # coefs = legndr.legfit(x_coords,y_coords,deg-1)
     # print('coefs = ', len(coefs))
     # print(info)
 
+    coefs = legndr.legfit(x_coords, y_coords, deg, rcond=1e-15)
     vizualize(x_coords, y_coords, pols, coefs)
 
 
 def vizualize(x_coords, y_coords, pols, coefs):
-    y_interp = get_vals(x_coords, pols, coefs)
-    print('\nresidual =', sum(map(abs,y_coords - y_interp)))
+    # y_interp = get_vals(x_coords, pols, coefs)
+    y_interp = legndr.legval(x_coords, coefs)
+    print('\nresidual =', sum(map(abs, y_coords - y_interp)))
 
     plt.plot(x_coords, y_coords, 'ro')
     plt.plot(x_coords, y_interp)
